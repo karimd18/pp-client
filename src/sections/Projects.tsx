@@ -296,7 +296,7 @@ const Projects: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Modal / Details Card */}
+      {/* Modal / Details Card — mobile bottom sheet + desktop centered */}
       <AnimatePresence>
         {selected && (
           <>
@@ -312,102 +312,122 @@ const Projects: React.FC = () => {
               key="sheet"
               role="dialog"
               aria-modal="true"
-              className="fixed inset-0 z-50 flex items-center justify-center p-4"
-              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              exit={{ opacity: 0, y: 24, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 320, damping: 32 }}
             >
-              <div className="relative w-full max-w-3xl rounded-2xl p-[1px] bg-gradient-to-br from-violet-700/60 via-fuchsia-700/40 to-transparent">
-                <div className="rounded-2xl bg-[#0c0913] border border-white/10 overflow-hidden">
-                  {/* Header */}
-                  <div className="flex items-start gap-4 p-5 md:p-6 border-b border-white/10">
+              {/* Outer gradient ring (responsive) */}
+              <div className="relative w-full sm:max-w-3xl sm:rounded-2xl rounded-t-2xl sm:p-[1px] bg-gradient-to-br from-violet-700/60 via-fuchsia-700/40 to-transparent">
+                {/* Card */}
+                <div
+                  className={[
+                    // Structure
+                    "flex max-h-[90vh] sm:max-h-[85vh] flex-col overflow-hidden",
+                    // Surface
+                    "bg-[#0c0913] border border-white/10",
+                    // Radius
+                    "rounded-t-2xl sm:rounded-2xl",
+                  ].join(" ")}
+                >
+                  {/* Sticky drag handle on mobile */}
+                  <div className="sm:hidden flex items-center justify-center pt-2">
+                    <div className="h-1.5 w-12 rounded-full bg-white/15" />
+                  </div>
+
+                  {/* Header (sticky) */}
+                  <div className="sticky top-0 z-10 flex items-start gap-3 px-4 sm:px-6 py-4 sm:py-5 border-b border-white/10 bg-[#0c0913]/95 backdrop-blur">
                     <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-bold text-white">
+                      <h3 className="text-lg sm:text-2xl font-bold text-white">
                         {selected.title}
                       </h3>
-                      <p className="mt-1 text-sm text-gray-400">
+                      <p className="mt-1 text-xs sm:text-sm text-gray-400">
                         {selected.categories.join(" • ")}
                       </p>
                     </div>
                     <button
                       aria-label="Close"
                       onClick={() => setSelected(null)}
-                      className="rounded-lg border border-white/10 bg-white/5 p-2 text-white hover:bg-white/10"
+                      className="shrink-0 rounded-lg border border-white/10 bg-white/5 p-2 sm:p-2.5 text-white hover:bg-white/10 active:scale-95"
                     >
-                      <X className="h-5 w-5" />
+                      <X className="h-5 w-5 sm:h-6 sm:w-6" />
                     </button>
                   </div>
 
-                  {/* Media */}
-                  <div className="relative aspect-[16/9] w-full overflow-hidden">
-                    <img
-                      src={selected.image}
-                      alt={selected.title}
-                      className="h-full w-full object-cover"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src =
-                          "https://via.placeholder.com/1280x720?text=Project";
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c0913] via-transparent to-transparent" />
-                  </div>
+                  {/* Scrollable content */}
+                  <div className="overflow-y-auto">
+                    {/* Media (responsive aspect) */}
+                    <div className="relative w-full aspect-video sm:aspect-[16/9]">
+                      <img
+                        src={selected.image}
+                        alt={selected.title}
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src =
+                            "https://via.placeholder.com/1280x720?text=Project";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0913] via-transparent to-transparent" />
+                    </div>
 
-                  {/* Content */}
-                  <div className="p-5 md:p-6">
-                    <p className="text-gray-200/90 leading-relaxed">
-                      {selected.description}
-                    </p>
+                    {/* Body */}
+                    <div className="px-4 sm:px-6 py-4 sm:py-6">
+                      <p className="text-sm sm:text-base text-gray-200/90 leading-relaxed">
+                        {selected.description}
+                      </p>
 
-                    {selected.tags?.length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {selected.tags.map((t, i) => (
-                          <span
-                            key={`sel-tag-${i}`}
-                            className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-violet-200"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {(() => {
-                      const hasSelectedLinks = Boolean(
-                        selected.links?.github || selected.links?.live
-                      );
-                      return hasSelectedLinks ? (
-                        <div className="mt-6 flex flex-wrap gap-3">
-                          {selected.links?.github && (
-                            <a
-                              href={selected.links.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white hover:bg-white/10"
+                      {selected.tags?.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {selected.tags.map((t, i) => (
+                            <span
+                              key={`sel-tag-${i}`}
+                              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-violet-200"
                             >
-                              <Github className="h-4 w-4" />
-                              View Code
-                            </a>
-                          )}
-                          {selected.links?.live && (
-                            <a
-                              href={selected.links.live}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white hover:bg-white/10"
-                            >
-                              <ExternalLink className="h-4 w-4" />
-                              Live Demo
-                            </a>
-                          )}
+                              {t}
+                            </span>
+                          ))}
                         </div>
-                      ) : (
-                        <div className="mt-6 inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-violet-200">
-                          <Lock className="h-4 w-4" />
-                          <span>Code is confidential / under NDA</span>
-                        </div>
-                      );
-                    })()}
+                      )}
+
+                      {/* Actions / Links or Confidential */}
+                      {(() => {
+                        const hasSelectedLinks = Boolean(
+                          selected.links?.github || selected.links?.live
+                        );
+                        return hasSelectedLinks ? (
+                          <div className="mt-6 flex flex-wrap gap-3">
+                            {selected.links?.github && (
+                              <a
+                                href={selected.links.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white hover:bg-white/10"
+                              >
+                                <Github className="h-4 w-4" />
+                                View Code
+                              </a>
+                            )}
+                            {selected.links?.live && (
+                              <a
+                                href={selected.links.live}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white hover:bg-white/10"
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                                Live Demo
+                              </a>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="mt-6 inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-violet-200">
+                            <Lock className="h-4 w-4" />
+                            <span>Code is confidential / under NDA</span>
+                          </div>
+                        );
+                      })()}
+                    </div>
                   </div>
                 </div>
               </div>
