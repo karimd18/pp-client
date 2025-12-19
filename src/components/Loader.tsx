@@ -1,40 +1,57 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
+import Typography from "@mui/material/Typography";
 
 const Loader: React.FC = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black overflow-hidden z-50">
-      {/* Animated Background Gradient */}
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(45deg, #1e1b4b, #2a0f64, #000000, #2a0f64, #1e1b4b)',
-          backgroundSize: '200% 200%',
-        }}
-        animate={{ backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      {/* Subtle Overlay Pulse */}
-      <motion.div
-        className="absolute inset-0 bg-black/20"
-        animate={{ opacity: [0.2, 0.35, 0.2] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      />
+    <div className="fixed inset-0 flex items-center justify-center bg-[#0a0a0a] z-50 overflow-hidden">
+      {/* Background ambient glow */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-dark-violet-900/20 via-black to-black animate-pulse-slow" />
 
-      {/* Spinner Rings with responsive scaling */}
-      <div className="relative w-32 h-32 scale-75 sm:scale-100">
-        {[
-          { dur: 1.2, color: 'border-t-indigo-500' },
-          { dur: 0.9, color: 'border-t-pink-500' },
-          { dur: 0.6, color: 'border-t-purple-500' }
-        ].map((ring, i) => (
+      <div className="relative flex flex-col items-center">
+        {/* Pulsing Orb */}
+        <div className="relative w-24 h-24 mb-8">
+          {/* Core */}
           <motion.div
-            key={i}
-            className={`absolute inset-${i * 2} border-2 sm:border-4 border-transparent ${ring.color} rounded-full`}
-            animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
-            transition={{ repeat: Infinity, ease: 'linear', duration: ring.dur }}
+            className="absolute inset-0 rounded-full bg-gradient-to-tr from-dark-violet-600 to-accent-500 blur-md"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
-        ))}
+          {/* Outer Ring 1 */}
+          <motion.div
+            className="absolute inset-[-10px] rounded-full border border-white/10"
+            animate={{ rotate: 360, scale: [1, 1.05, 1] }}
+            transition={{
+              rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+              scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+            }}
+          />
+          {/* Outer Ring 2 */}
+          <motion.div
+            className="absolute inset-[-20px] rounded-full border border-white/5 border-t-accent-500/30"
+            animate={{ rotate: -360 }}
+            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+
+        {/* Text */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Typography
+            variant="h6"
+            className="text-white font-bold tracking-[0.2em] uppercase"
+          >
+            Loading
+          </Typography>
+          <motion.div
+            className="h-0.5 bg-gradient-to-r from-transparent via-accent-500 to-transparent mt-2 w-full"
+            animate={{ scaleX: [0, 1, 0], opacity: [0, 1, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
       </div>
     </div>
   );

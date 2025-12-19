@@ -1,105 +1,155 @@
-import React from 'react';
-import { Github, Linkedin, Mail, MapPin, Phone, Instagram } from 'lucide-react';
-import Typography from '@mui/material/Typography';
+import React from "react";
+import { Github, Linkedin, Mail, MapPin, Phone, Instagram } from "lucide-react";
+import Typography from "@mui/material/Typography";
+import { motion } from "framer-motion";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-gradient-to-t from-dark-violet-900 to-black pt-16">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Divider */}
-        <div className="border-t border-dark-violet-800/50 mb-12" />
+    <footer className="w-full bg-black pt-20 pb-10 relative overflow-hidden">
+      {/* Dynamic Background Elements - Flowing from Sections above */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-dark-violet-900/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        {/* Divider with gradient */}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent mb-16" />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
           {/* ── Logo + Description + Socials ───────────────────────────────────────── */}
           <div className="space-y-6">
-            <Typography variant="h3" className="font-extrabold">
-              <span className="text-purple-400">Karim </span>
+            <Typography variant="h3" className="font-extrabold tracking-tight">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">
+                Karim{" "}
+              </span>
               <span className="text-white">Doueik</span>
             </Typography>
-            <Typography variant="body1" className="text-gray-400">
-              Full-Stack Developer focused on crafting seamless web, mobile & desktop experiences with modern technologies.
+            <Typography
+              variant="body1"
+              className="text-gray-400 leading-relaxed font-light"
+            >
+              Full-Stack Developer focused on crafting seamless web, mobile &
+              desktop experiences with modern technologies.
             </Typography>
-            <div className="flex items-center space-x-4">
-              <a
-                href="https://github.com/karimd18"
-                className="rounded-full p-2 bg-dark-violet-800/50 hover:bg-dark-violet-700 transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="h-6 w-6 text-gray-300 hover:text-white transition-colors" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/karim-doueik-6a9b30252/"
-                className="rounded-full p-2 bg-dark-violet-800/50 hover:bg-dark-violet-700 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-6 w-6 text-gray-300 hover:text-white transition-colors" />
-              </a>
-              <a
-                href="https://www.instagram.com/karimdoueik"
-                className="rounded-full p-2 bg-dark-violet-800/50 hover:bg-dark-violet-700 transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-6 w-6 text-gray-300 hover:text-white transition-colors" />
-              </a>
+
+            <div className="flex items-center gap-3">
+              {[
+                {
+                  icon: <Github size={20} />,
+                  href: "https://github.com/karimd18",
+                  label: "GitHub",
+                },
+                {
+                  icon: <Linkedin size={20} />,
+                  href: "https://www.linkedin.com/in/karim-doueik-6a9b30252/",
+                  label: "LinkedIn",
+                },
+                {
+                  icon: <Instagram size={20} />,
+                  href: "https://www.instagram.com/karimdoueik",
+                  label: "Instagram",
+                },
+              ].map((social) => (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -5 }}
+                  className="p-3 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-accent-500 hover:border-accent-500 shadow-lg hover:shadow-accent-500/25 transition-all duration-300"
+                  aria-label={social.label}
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
             </div>
           </div>
 
           {/* ── Quick Links ───────────────────────────────────────────────────────────── */}
-          <div className="space-y-4">
-            <Typography variant="h6" className="text-white font-semibold mb-4">
+          <div className="space-y-6">
+            <Typography
+              variant="h6"
+              className="text-white font-bold tracking-wide uppercase text-sm"
+            >
               Quick Links
             </Typography>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {[
-                ['Home', '#hero'],
-                ['About', '#about'],
-                ['Projects', '#projects'],
-                ['Journey', '#journey'],
-                ['Contact', '#contact'],
+                ["Home", "#hero"],
+                ["About", "#about"],
+                ["Projects", "#projects"],
+                ["Journey", "#journey"],
+                ["Contact", "#contact"],
               ].map(([label, href]) => (
                 <li key={label}>
-                  <Typography
-                    component="a"
+                  <a
                     href={href}
-                    variant="body2"
-                    className="text-gray-400 hover:text-purple-400 transition-colors"
+                    className="text-gray-400 hover:text-accent-400 transition-colors flex items-center gap-2 group"
                   >
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-accent-400 transition-colors" />
                     {label}
-                  </Typography>
+                  </a>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* ── Contact Info ─────────────────────────────────────────────────────────── */}
-          <div className="space-y-4">
-            <Typography variant="h6" className="text-white font-semibold mb-4">
+          <div className="space-y-6">
+            <Typography
+              variant="h6"
+              className="text-white font-bold tracking-wide uppercase text-sm"
+            >
               Contact Info
             </Typography>
-            <div className="flex items-center gap-2">
-              <Mail className="h-5 w-5 text-purple-400" />
-              <Typography variant="body2" className="text-gray-400">
-                karimdoueik9@gmail.com
-              </Typography>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-purple-400" />
-              <Typography variant="body2" className="text-gray-400">
-                Lebanon
-              </Typography>
-            </div>
-            <div className="flex items-center gap-2">
-              <Phone className="h-5 w-5 text-purple-400" />
-              <Typography variant="body2" className="text-gray-400">
-                +961 78 896 067
-              </Typography>
+            <div className="space-y-4">
+              <a
+                href="mailto:karimdoueik9@gmail.com"
+                className="flex items-center gap-3 group"
+              >
+                <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-accent-500/50 transition-colors">
+                  <Mail className="h-5 w-5 text-gray-300 group-hover:text-accent-400 transition-colors" />
+                </div>
+                <Typography
+                  variant="body2"
+                  className="text-gray-400 group-hover:text-white transition-colors"
+                >
+                  karimdoueik9@gmail.com
+                </Typography>
+              </a>
+
+              <div className="flex items-center gap-3 group">
+                <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-accent-500/50 transition-colors">
+                  <MapPin className="h-5 w-5 text-gray-300 group-hover:text-accent-400 transition-colors" />
+                </div>
+                <Typography
+                  variant="body2"
+                  className="text-gray-400 group-hover:text-white transition-colors"
+                >
+                  Lebanon
+                </Typography>
+              </div>
+
+              <a
+                href="tel:+96178896067"
+                className="flex items-center gap-3 group"
+              >
+                <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-accent-500/50 transition-colors">
+                  <Phone className="h-5 w-5 text-gray-300 group-hover:text-accent-400 transition-colors" />
+                </div>
+                <Typography
+                  variant="body2"
+                  className="text-gray-400 group-hover:text-white transition-colors"
+                >
+                  +961 78 896 067
+                </Typography>
+              </a>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-dark-violet-800/50 mt-12 pt-8 text-center">
-          <Typography variant="body2" className="text-gray-500">
+        <div className="mt-16 pt-8 text-center border-t border-white/5">
+          <Typography variant="body2" className="text-gray-500 text-sm">
             © {new Date().getFullYear()} Karim Doueik. All rights reserved.
           </Typography>
         </div>
