@@ -11,39 +11,44 @@ const Hero: React.FC = () => {
         relative
         w-full
         min-h-screen
-        bg-gradient-to-b from-black to-dark-violet-900
+        bg-gradient-to-b from-black via-dark-violet-900/40 to-black
         flex items-center
         overflow-hidden
         pb-12 md:pb-20
         pt-16
       "
     >
-      <div className="container mx-auto flex flex-col-reverse md:flex-row items-center px-4 sm:px-6 md:px-8 pt-4">
+      {/* Dynamic Background Glow */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-dark-violet-600/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent-500/10 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+
+      <div className="container mx-auto flex flex-col-reverse md:flex-row items-center px-4 sm:px-6 md:px-8 pt-4 relative z-10">
         {/* Left Column */}
-        <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-4 sm:space-y-5 z-30 mt-6 md:mt-0">
+        <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6 sm:space-y-8 z-30 mt-8 md:mt-0">
           {/* Heading */}
           <div className="overflow-hidden">
             <Typography
               component="h1"
               variant="h1"
-              sx={{ typography: { xs: 'h2', md: 'h1' } }}
+              sx={{ typography: { xs: "h2", md: "h1" } }}
               className="
                 font-extrabold
                 leading-tight
-                text-xl        
-                sm:text-2xl    
-                md:text-5xl    
-                lg:text-6xl    
+                text-4xl        
+                sm:text-5xl    
+                md:text-6xl    
+                lg:text-7xl    
                 z-30
                 mb-2 sm:mb-3
                 flex flex-wrap justify-center md:justify-start
+                tracking-tight
                 "
             >
-              <span className="mr-2 overflow-hidden">
+              <span className="mr-3 overflow-hidden">
                 <motion.span
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
+                  transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
                   className="inline-block text-white"
                 >
                   I'm
@@ -52,10 +57,15 @@ const Hero: React.FC = () => {
 
               <span className="overflow-hidden">
                 <motion.span
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="inline-block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                  transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+                  className="
+                    inline-block 
+                    bg-gradient-to-r from-accent-400 via-purple-400 to-dark-violet-300 
+                    bg-clip-text text-transparent
+                    pb-2
+                  "
                 >
                   Karim Doueik
                 </motion.span>
@@ -72,15 +82,22 @@ const Hero: React.FC = () => {
           >
             <Typography
               variant="h6"
-              className="max-w-lg text-gray-300 text-base sm:text-lg md:text-xl lg:text-2xl font-light leading-relaxed"
+              className="max-w-xl text-gray-300/90 text-lg sm:text-xl md:text-2xl font-light leading-relaxed"
             >
-              A curious and adaptable thinker with a passion for continuous learning, collaboration, and turning challenges into meaningful solutions.
+              A curious and adaptable thinker with a passion for continuous
+              learning, collaboration, and turning challenges into meaningful
+              solutions.
             </Typography>
           </motion.div>
 
           {/* Button */}
-          <div className="relative mt-4 sm:mt-5">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-50 blur-xl rounded-full" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.8 }}
+            className="relative mt-6 sm:mt-8 group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-dark-violet-500 to-accent-500 opacity-60 blur-lg rounded-full group-hover:opacity-80 transition duration-500" />
             <motion.a
               href="#projects"
               whileHover={{ scale: 1.05 }}
@@ -88,32 +105,41 @@ const Hero: React.FC = () => {
               className="
                 relative
                 inline-block
-                px-6 py-2.5
-                sm:px-7 sm:py-3
-                bg-gradient-to-r from-purple-500 to-pink-500
+                px-8 py-3.5
+                sm:px-9 sm:py-4
+                bg-gradient-to-r from-dark-violet-600 to-accent-600
                 rounded-full
-                drop-shadow-lg
-                hover:opacity-90
-                transition
+                shadow-[0_0_20px_rgba(114,9,183,0.3)]
+                hover:shadow-[0_0_30px_rgba(247,37,133,0.5)]
+                transition-all
                 duration-300
+                border border-white/10
               "
             >
               <Typography
                 variant="button"
-                className="text-white font-semibold text-sm sm:text-base"
+                className="text-white font-bold text-sm sm:text-base tracking-wide"
               >
                 View Projects
               </Typography>
             </motion.a>
-          </div>
+          </motion.div>
         </div>
 
         {/* Right Column */}
-        <div className="w-full md:w-1/2 flex justify-center mb-4 sm:mb-0">
-          <img
-            src="https://i.ibb.co/gL2hq04X/4102879-971-Photoroom-1.png"
+        <div className="w-full md:w-1/2 flex justify-center mb-8 sm:mb-0 relative">
+          {/* Glow behind image */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-dark-violet-600/30 to-accent-500/20 rounded-full blur-[80px] opacity-60 transform scale-75" />
+
+          <motion.img
+            src="/assets/images/hero-illustration.png"
             alt="Laptop and tablet illustration"
+            initial={{ opacity: 0, x: 20, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
             className="
+              relative
+              z-10
               w-full
               max-w-[340px]
               xs:max-w-[700px]
@@ -122,6 +148,8 @@ const Hero: React.FC = () => {
               lg:max-w-[840px]
               xl:max-w-[800px]
               object-contain
+              drop-shadow-2xl
+              animate-float
             "
           />
         </div>
@@ -132,19 +160,24 @@ const Hero: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.8 }}
-        className="hidden md:block absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30"
+        className="hidden md:block absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30"
       >
         <a
           href="#about"
-          className="flex flex-col items-center text-gray-400 hover:text-purple-400 transition-colors duration-300"
+          className="flex flex-col items-center text-gray-400 hover:text-accent-400 transition-colors duration-300 group"
         >
           <Typography
             variant="caption"
-            className="mb-1 uppercase tracking-wide text-xs"
+            className="mb-2 uppercase tracking-[0.2em] text-xs font-medium group-hover:tracking-[0.3em] transition-all"
           >
             Scroll Down
           </Typography>
-          <ChevronDown className="animate-bounce text-purple-400" size={22} />
+          <div className="p-2 rounded-full bg-white/5 border border-white/5 group-hover:border-accent-400/30 transition-colors">
+            <ChevronDown
+              className="animate-bounce-slow text-accent-400"
+              size={20}
+            />
+          </div>
         </a>
       </motion.div>
     </section>

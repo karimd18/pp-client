@@ -26,7 +26,11 @@ const DESCRIPTION_LIMIT = 200;
 const filters: { id: FilterKey; label: string; icon: React.ReactNode }[] = [
   { id: "all", label: "All Projects", icon: <Code className="h-4 w-4" /> },
   { id: "web", label: "Web Apps", icon: <Monitor className="h-4 w-4" /> },
-  { id: "mobile", label: "Mobile Apps", icon: <Smartphone className="h-4 w-4" /> },
+  {
+    id: "mobile",
+    label: "Mobile Apps",
+    icon: <Smartphone className="h-4 w-4" />,
+  },
   { id: "AI", label: "AI Projects", icon: <Brain className="h-4 w-4" /> },
 ];
 
@@ -37,7 +41,11 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
 };
 
 const Projects: React.FC = () => {
@@ -61,7 +69,8 @@ const Projects: React.FC = () => {
   const filteredProjects = useMemo(
     () =>
       projects.filter(
-        (p) => filter === "all" || p.categories.includes(filter as ProjectCategory)
+        (p) =>
+          filter === "all" || p.categories.includes(filter as ProjectCategory)
       ),
     [projects, filter]
   );
@@ -86,19 +95,23 @@ const Projects: React.FC = () => {
   return (
     <section
       id="projects"
-      className="w-full min-h-screen bg-[radial-gradient(1200px_600px_at_80%_-10%,rgba(127,63,191,0.18),transparent),linear-gradient(to_bottom,#0a0712,#000)] py-16 md:py-20"
+      className="w-full min-h-screen bg-black py-20 relative overflow-hidden"
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Dynamic Background Elements - Consistent "Blobs" */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-dark-violet-900/20 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-accent-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Heading + Filters */}
         <motion.div
           ref={ref}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="text-center mb-10 md:mb-14"
+          className="text-center mb-16"
         >
           <motion.h2
-            className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-3"
+            className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-6"
             variants={itemVariants}
           >
             My{" "}
@@ -107,7 +120,7 @@ const Projects: React.FC = () => {
             </span>
           </motion.h2>
           <motion.p
-            className="text-gray-300/90 max-w-3xl mx-auto mb-8"
+            className="text-gray-300/90 max-w-3xl mx-auto mb-10 text-lg font-light leading-relaxed"
             variants={itemVariants}
           >
             A curated selection across web, mobile, and AI—clean UI, strong UX,
@@ -124,14 +137,14 @@ const Projects: React.FC = () => {
                 <motion.button
                   key={cat.label}
                   onClick={() => setFilter(cat.id)}
-                  whileHover={{ y: -1.5, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ y: -2, scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   className={[
-                    "flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all",
-                    "backdrop-blur",
+                    "flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold tracking-wide transition-all duration-300",
+                    "backdrop-blur-md border",
                     isActive
-                      ? "text-white shadow-lg shadow-violet-900/30 bg-gradient-to-r from-violet-700/70 to-fuchsia-700/70"
-                      : "text-gray-300 bg-white/5 hover:bg-white/10 border border-white/10",
+                      ? "text-white border-accent-500/50 bg-gradient-to-r from-dark-violet-600 to-accent-600 shadow-[0_0_15px_rgba(114,9,183,0.4)]"
+                      : "text-gray-400 border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 hover:text-white",
                   ].join(" ")}
                 >
                   {cat.icon}
@@ -147,7 +160,7 @@ const Projects: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
         >
           {/* Skeletons */}
           {loading &&
@@ -155,7 +168,7 @@ const Projects: React.FC = () => {
               <motion.div
                 key={`sk-${i}`}
                 variants={itemVariants}
-                className="h-80 rounded-2xl bg-white/5 border border-white/10 animate-pulse"
+                className="h-[400px] rounded-2xl bg-white/5 border border-white/10 animate-pulse"
               />
             ))}
 
@@ -164,8 +177,10 @@ const Projects: React.FC = () => {
               variants={itemVariants}
               className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 py-16"
             >
-              <TagIcon className="h-8 w-8 text-gray-400 mb-3" />
-              <p className="text-gray-300">No projects in this category yet.</p>
+              <TagIcon className="h-10 w-10 text-gray-500 mb-4" />
+              <p className="text-gray-400 text-lg">
+                No projects in this category yet.
+              </p>
             </motion.div>
           )}
 
@@ -181,29 +196,43 @@ const Projects: React.FC = () => {
                 <motion.article
                   key={`${project.id}-${project.title}`}
                   variants={itemVariants}
-                  className="group relative rounded-2xl p-[1px] bg-gradient-to-br from-violet-800/40 via-fuchsia-700/20 to-transparent hover:from-violet-700/70 hover:via-fuchsia-700/40 hover:to-violet-900/10 transition-colors"
+                  whileHover={{ y: -8 }}
+                  className="group relative rounded-2xl p-[1px] bg-gradient-to-br from-white/10 via-white/5 to-transparent hover:from-accent-500 hover:via-purple-500 hover:to-dark-violet-500 transition-all duration-500 h-full shadow-lg hover:shadow-[0_0_30px_rgba(114,9,183,0.15)]"
                 >
-                  <div className="relative h-full rounded-2xl overflow-hidden bg-[#0d0a14]/90 border border-white/10">
+                  {/* Glow effect on hover */}
+                  <div className="absolute -inset-[1px] bg-gradient-to-br from-accent-500 to-dark-violet-600 rounded-2xl opacity-0 group-hover:opacity-40 blur-md transition-opacity duration-500" />
+
+                  <div className="relative h-full rounded-2xl overflow-hidden bg-[#0d0a14] border border-white/5 group-hover:border-transparent transition-colors flex flex-col">
                     {/* Thumb */}
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-56 overflow-hidden">
                       <motion.img
                         src={project.image}
                         alt={project.title}
                         className="w-full h-full object-cover"
-                        initial={{ scale: 1.02 }}
-                        whileHover={{ scale: 1.08 }}
-                        transition={{ duration: 0.5 }}
+                        initial={{ scale: 1 }}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.6 }}
+                        loading="lazy"
                         onError={(e) => {
                           (e.currentTarget as HTMLImageElement).src =
-                            "https://via.placeholder.com/800x450?text=Project+Image";
+                            "/assets/projects/placeholder.jpg"; // Fallback
                         }}
                       />
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0d0a14] via-transparent to-transparent opacity-90" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0d0a14] via-[#0d0a14]/20 to-transparent opacity-90" />
+
                       {/* Title Row */}
-                      <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
-                        <Typography variant="h6" className="text-white font-semibold truncate">
-                          {project.title}
-                        </Typography>
+                      <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between z-10">
+                        <div>
+                          <Typography
+                            variant="h6"
+                            className="text-white font-bold tracking-tight text-xl leading-snug drop-shadow-md"
+                          >
+                            {project.title}
+                          </Typography>
+                          <span className="text-xs text-accent-300 font-bold bg-accent-500/10 px-2.5 py-1 rounded-md border border-accent-500/20 mt-1.5 inline-block backdrop-blur-sm tracking-wide">
+                            {project.categories[0].toUpperCase()}
+                          </span>
+                        </div>
 
                         <div className="flex items-center gap-2">
                           {hasLinks ? (
@@ -213,7 +242,7 @@ const Projects: React.FC = () => {
                                   href={project.links.github}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center justify-center rounded-full bg-black/60 border border-white/10 p-2 text-white hover:bg-white/10 transition"
+                                  className="inline-flex items-center justify-center rounded-full bg-black/60 border border-white/20 p-2 text-white hover:bg-accent-500 hover:border-accent-400 transition-all duration-300 shadow-lg backdrop-blur-sm hover:scale-110"
                                   aria-label="GitHub"
                                   onClick={(e) => e.stopPropagation()}
                                 >
@@ -225,7 +254,7 @@ const Projects: React.FC = () => {
                                   href={project.links.live}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center justify-center rounded-full bg-black/60 border border-white/10 p-2 text-white hover:bg-white/10 transition"
+                                  className="inline-flex items-center justify-center rounded-full bg-black/60 border border-white/20 p-2 text-white hover:bg-accent-500 hover:border-accent-400 transition-all duration-300 shadow-lg backdrop-blur-sm hover:scale-110"
                                   aria-label="Live Demo"
                                   onClick={(e) => e.stopPropagation()}
                                 >
@@ -235,11 +264,10 @@ const Projects: React.FC = () => {
                             </>
                           ) : (
                             <span
-                              className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-2.5 py-1 text-xs text-violet-200"
+                              className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-2.5 py-1 text-xs text-gray-400"
                               title="This project's code and demo are private"
                             >
                               <Lock className="h-3.5 w-3.5" />
-                              Confidential
                             </span>
                           )}
                         </div>
@@ -248,14 +276,14 @@ const Projects: React.FC = () => {
 
                     {/* Body */}
                     <button
-                      className="text-left w-full"
+                      className="text-left w-full flex-grow flex flex-col group/card-body outline-none"
                       onClick={() => setSelected(project)}
                     >
-                      <div className="p-5 md:p-6">
+                      <div className="p-5 md:p-6 flex-grow flex flex-col">
                         <Typography
                           variant="body2"
                           className={[
-                            "text-gray-300/90 transition-all",
+                            "text-gray-300/80 leading-relaxed transition-all mb-4 font-light",
                             isLong && !isExpanded ? "line-clamp-3" : "",
                           ].join(" ")}
                         >
@@ -263,29 +291,34 @@ const Projects: React.FC = () => {
                         </Typography>
 
                         {isLong && (
-                          <div className="mt-2">
+                          <div className="mt-auto mb-4">
                             <span
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 toggleExpand(project.id);
                               }}
-                              className="cursor-pointer text-sm text-violet-300 hover:text-violet-200"
+                              className="cursor-pointer text-sm font-medium text-accent-400 hover:text-accent-300 transition-colors"
                             >
                               {isExpanded ? "Show less" : "Read more"}
                             </span>
                           </div>
                         )}
 
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {project.tags.map((tag, idx) => (
+                        <div className="mt-auto pt-4 border-t border-white/5 flex flex-wrap gap-2">
+                          {project.tags.slice(0, 3).map((tag, idx) => (
                             <span
                               key={`${project.id}-tag-${idx}`}
-                              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-violet-200"
+                              className="rounded-md border border-dark-violet-500/30 bg-dark-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-200"
                             >
                               {tag}
                             </span>
                           ))}
+                          {project.tags.length > 3 && (
+                            <span className="rounded-md border border-white/5 bg-white/5 px-2 py-1 text-xs text-gray-400">
+                              +{project.tags.length - 3}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </button>
@@ -296,13 +329,13 @@ const Projects: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Modal / Details Card — mobile bottom sheet + desktop centered */}
+      {/* Modern Glass Modal / Details Panel */}
       <AnimatePresence>
         {selected && (
           <>
             <motion.div
               key="backdrop"
-              className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
+              className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -312,121 +345,105 @@ const Projects: React.FC = () => {
               key="sheet"
               role="dialog"
               aria-modal="true"
-              className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-              initial={{ opacity: 0, y: 24, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 24, scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 320, damping: 32 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
             >
-              {/* Outer gradient ring (responsive) */}
-              <div className="relative w-full sm:max-w-3xl sm:rounded-2xl rounded-t-2xl sm:p-[1px] bg-gradient-to-br from-violet-700/60 via-fuchsia-700/40 to-transparent">
-                {/* Card */}
-                <div
-                  className={[
-                    // Structure
-                    "flex max-h-[90vh] sm:max-h-[85vh] flex-col overflow-hidden",
-                    // Surface
-                    "bg-[#0c0913] border border-white/10",
-                    // Radius
-                    "rounded-t-2xl sm:rounded-2xl",
-                  ].join(" ")}
+              <div
+                className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0c0913] border border-white/10 shadow-2xl relative scrollbar-hide"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Close Button - Floated */}
+                <button
+                  aria-label="Close"
+                  onClick={() => setSelected(null)}
+                  className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all duration-300 group"
                 >
-                  {/* Sticky drag handle on mobile */}
-                  <div className="sm:hidden flex items-center justify-center pt-2">
-                    <div className="h-1.5 w-12 rounded-full bg-white/15" />
+                  <X className="h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
+                </button>
+
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                  {/* Left: Image Area */}
+                  <div className="relative h-64 md:h-auto min-h-[300px]">
+                    <img
+                      src={selected.image}
+                      alt={selected.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          "https://via.placeholder.com/1280x720?text=Project";
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c0913] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0c0913]" />
+
+                    {/* Floating Categories */}
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      {selected.categories.map((cat) => (
+                        <span
+                          key={cat}
+                          className="px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-xs font-bold text-white border border-white/10"
+                        >
+                          {cat}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Header (sticky) */}
-                  <div className="sticky top-0 z-10 flex items-start gap-3 px-4 sm:px-6 py-4 sm:py-5 border-b border-white/10 bg-[#0c0913]/95 backdrop-blur">
-                    <div className="flex-1">
-                      <h3 className="text-lg sm:text-2xl font-bold text-white">
-                        {selected.title}
-                      </h3>
-                      <p className="mt-1 text-xs sm:text-sm text-gray-400">
-                        {selected.categories.join(" • ")}
-                      </p>
-                    </div>
-                    <button
-                      aria-label="Close"
-                      onClick={() => setSelected(null)}
-                      className="shrink-0 rounded-lg border border-white/10 bg-white/5 p-2 sm:p-2.5 text-white hover:bg-white/10 active:scale-95"
-                    >
-                      <X className="h-5 w-5 sm:h-6 sm:w-6" />
-                    </button>
-                  </div>
+                  {/* Right: Content Area */}
+                  <div className="p-8 flex flex-col">
+                    <h3 className="text-3xl font-extrabold text-white mb-2">
+                      {selected.title}
+                    </h3>
 
-                  {/* Scrollable content */}
-                  <div className="overflow-y-auto">
-                    {/* Media (responsive aspect) */}
-                    <div className="relative w-full aspect-video sm:aspect-[16/9]">
-                      <img
-                        src={selected.image}
-                        alt={selected.title}
-                        className="h-full w-full object-cover"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src =
-                            "https://via.placeholder.com/1280x720?text=Project";
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0913] via-transparent to-transparent" />
+                    {/* Tech Stack */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {selected.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs font-medium px-2.5 py-1 rounded bg-dark-violet-500/10 text-violet-300 border border-dark-violet-500/20"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
 
-                    {/* Body */}
-                    <div className="px-4 sm:px-6 py-4 sm:py-6">
-                      <p className="text-sm sm:text-base text-gray-200/90 leading-relaxed">
-                        {selected.description}
-                      </p>
+                    <div className="prose prose-invert max-w-none mb-8 text-gray-300/90 leading-relaxed font-light">
+                      <p>{selected.description}</p>
+                    </div>
 
-                      {selected.tags?.length > 0 && (
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {selected.tags.map((t, i) => (
-                            <span
-                              key={`sel-tag-${i}`}
-                              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-violet-200"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Actions / Links or Confidential */}
-                      {(() => {
-                        const hasSelectedLinks = Boolean(
-                          selected.links?.github || selected.links?.live
-                        );
-                        return hasSelectedLinks ? (
-                          <div className="mt-6 flex flex-wrap gap-3">
-                            {selected.links?.github && (
-                              <a
-                                href={selected.links.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white hover:bg-white/10"
-                              >
-                                <Github className="h-4 w-4" />
-                                View Code
-                              </a>
-                            )}
-                            {selected.links?.live && (
-                              <a
-                                href={selected.links.live}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white hover:bg-white/10"
-                              >
-                                <ExternalLink className="h-4 w-4" />
-                                Live Demo
-                              </a>
-                            )}
+                    <div className="mt-auto">
+                      <div className="flex flex-wrap gap-4">
+                        {selected.links?.live && (
+                          <a
+                            href={selected.links.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 min-w-[140px] flex items-center justify-center gap-2 bg-gradient-to-r from-accent-600 to-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-accent-500/25 hover:scale-[1.02] transition-all duration-300"
+                          >
+                            <ExternalLink className="w-5 h-5" />
+                            View Live
+                          </a>
+                        )}
+                        {selected.links?.github && (
+                          <a
+                            href={selected.links.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 min-w-[140px] flex items-center justify-center gap-2 bg-white/5 border border-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                          >
+                            <Github className="w-5 h-5" />
+                            View Code
+                          </a>
+                        )}
+                        {!selected.links?.live && !selected.links?.github && (
+                          <div className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-center text-gray-400 text-sm">
+                            <Lock className="w-4 h-4 mx-auto mb-2 opacity-50" />
+                            This project is confidential.
                           </div>
-                        ) : (
-                          <div className="mt-6 inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-violet-200">
-                            <Lock className="h-4 w-4" />
-                            <span>Code is confidential / under NDA</span>
-                          </div>
-                        );
-                      })()}
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

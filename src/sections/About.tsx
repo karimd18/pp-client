@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Typography from "@mui/material/Typography";
 import { Code, Server, Cpu, Database } from "lucide-react";
-import cvFile from "../../public/KarimDoueikCV.pdf";
+const cvFile = "/KarimDoueikCV.pdf";
 
 interface Skill {
   name: string;
@@ -100,11 +100,11 @@ const About: React.FC = () => {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   };
 
@@ -112,7 +112,7 @@ const About: React.FC = () => {
     hidden: { width: 0 },
     visible: (level: number) => ({
       width: `${level}%`,
-      transition: { duration: 0.8, ease: "easeInOut" },
+      transition: { duration: 1, ease: [0.4, 0, 0.2, 1] },
     }),
   };
 
@@ -120,79 +120,86 @@ const About: React.FC = () => {
     <section
       id="about"
       className="
+        relative
         w-full
         min-h-screen
-        bg-gradient-to-b from-dark-violet-900 to-black
-        py-16 md:py-20
+        bg-black
+        py-20 md:py-28
+        overflow-hidden
       "
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-dark-violet-900/20 rounded-full blur-[100px] -translate-x-1/2 pointer-events-none" />
+      <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-accent-500/10 rounded-full blur-[100px] translate-x-1/2 pointer-events-none" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           ref={ref}
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 items-start"
+          className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-20 items-start"
         >
           {/* Left Column: About Text */}
-          <motion.div variants={itemVariants} className="space-y-6">
+          <motion.div variants={itemVariants} className="space-y-8">
             <div className="relative inline-block">
               <Typography
                 component="h2"
-                variant="h4"
-                className="text-white font-extrabold"
+                variant="h3"
+                className="text-white font-extrabold tracking-tight text-4xl md:text-5xl"
               >
                 About{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-purple-500">
                   Me
                 </span>
               </Typography>
-              <div className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+              <div className="absolute -bottom-2 left-0 w-1/2 h-1.5 bg-gradient-to-r from-accent-500 to-purple-600 rounded-full"></div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6 text-lg">
               <Typography
-                variant="h6"
-                className="text-gray-300 leading-relaxed"
+                variant="body1"
+                className="text-gray-300/90 leading-relaxed font-light"
               >
                 I’m a builder at heart—turning bold ideas into end-to-end
                 digital experiences.
               </Typography>
 
               <Typography
-                variant="h6"
-                className="text-gray-300 leading-relaxed"
+                variant="body1"
+                className="text-gray-300/90 leading-relaxed font-light"
               >
                 From intuitive web interfaces to cross-platform apps and
                 AI-powered services, I craft solutions for real-world needs.
               </Typography>
 
               <Typography
-                variant="h6"
-                className="text-gray-300 leading-relaxed"
+                variant="body1"
+                className="text-gray-300/90 leading-relaxed font-light"
               >
                 I thrive on collaboration and iteration, focusing on
                 performance, reliability, and seamless user experiences.
               </Typography>
             </div>
 
-            <div className="flex flex-wrap gap-3 mt-8">
+            <div className="flex flex-wrap gap-4 pt-4">
               <motion.a
                 href="#contact"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
                 className="
                   inline-flex
                   items-center
-                  px-5
-                  py-2.5
-                  bg-gradient-to-r from-purple-500 to-pink-500
-                  text-white font-medium
-                  rounded-lg
-                  text-sm
-                  shadow-lg
-                  transition duration-300
+                  px-8
+                  py-3.5
+                  bg-gradient-to-r from-accent-600 to-dark-violet-600
+                  text-white font-bold tracking-wide
+                  rounded-full
+                  shadow-[0_0_20px_rgba(247,37,133,0.4)]
+                  hover:shadow-[0_0_30px_rgba(247,37,133,0.6)]
+                  transition-all duration-300
                   group
+                  text-sm md:text-base
                 "
               >
                 <span>Get In Touch</span>
@@ -203,24 +210,27 @@ const About: React.FC = () => {
 
               <motion.a
                 onClick={handleDownload}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
                 className="
                   inline-flex
                   items-center
-                  px-5
+                  px-8
+                  py-3.5
                   cursor-pointer
-                  py-2.5
-                  border border-dark-violet-500
-                  rounded-lg
-                  text-white
-                  hover:bg-dark-violet-800/30
-                  transition duration-300
+                  border border-white/10
+                  bg-white/5
+                  backdrop-blur-sm
+                  rounded-full
+                  text-white font-medium
+                  hover:bg-white/10 hover:border-accent-500/30
+                  transition-all duration-300
                   group
+                  text-sm md:text-base
                 "
               >
                 <span>Download CV</span>
-                <span className="ml-2 group-hover:translate-y-0.5 transition-transform">
+                <span className="ml-2 group-hover:translate-y-1 transition-transform">
                   &darr;
                 </span>
               </motion.a>
@@ -228,16 +238,19 @@ const About: React.FC = () => {
           </motion.div>
 
           {/* Right Column: Skills Grid */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="relative inline-block mb-4">
+          <motion.div variants={itemVariants} className="space-y-8">
+            <div className="flex items-end gap-4 mb-2">
               <Typography
                 component="h3"
-                variant="h5"
-                className="text-dark-violet-300 font-semibold"
+                variant="h4"
+                className="text-white font-bold tracking-tight"
               >
-                My <span className="heading-gradient">Skills</span>
+                My{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-accent-400">
+                  Skills
+                </span>
               </Typography>
-              <div className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></div>
+              <div className="flex-grow h-[1px] bg-gradient-to-r from-white/10 to-transparent mb-2"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -245,55 +258,65 @@ const About: React.FC = () => {
                 <motion.div
                   key={categoryIndex}
                   variants={itemVariants}
+                  whileHover={{ y: -5 }}
                   className="
-                    bg-dark-violet-900/50
-                    backdrop-blur-sm
-                    border border-dark-violet-700
-                    rounded-xl
+                    relative
+                    overflow-hidden
+                    bg-[#0d0a14]/60
+                    backdrop-blur-md
+                    border border-white/5
+                    rounded-2xl
                     p-6
-                    shadow-md
-                    hover:shadow-purple-500/20
+                    shadow-lg
+                    hover:border-accent-500/30
+                    hover:shadow-[0_0_20px_rgba(114,9,183,0.15)]
                     transition-all
                     duration-300
+                    group
                   "
                 >
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-8 h-8 bg-dark-violet-800 rounded-lg flex items-center justify-center">
-                      {category.icon}
+                  {/* Subtle gradient background on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  <div className="relative z-10 flex items-center gap-3 mb-6">
+                    <div className="p-2.5 bg-white/5 rounded-xl text-accent-300 group-hover:text-accent-400 group-hover:bg-accent-500/10 transition-colors">
+                      {React.cloneElement(
+                        category.icon as React.ReactElement<any>,
+                        {
+                          className: "h-6 w-6",
+                        }
+                      )}
                     </div>
                     <Typography
                       variant="subtitle1"
-                      className="text-white font-bold"
+                      className="text-white font-bold text-lg tracking-wide group-hover:text-accent-100 transition-colors"
                     >
                       {category.title}
                     </Typography>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="relative z-10 space-y-5">
                     {category.skills.map((skill, skillIndex) => (
-                      <motion.div
-                        key={skillIndex}
-                        variants={itemVariants}
-                        className="group"
-                      >
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm font-medium text-white group-hover:text-purple-300 transition-colors">
+                      <div key={skillIndex} className="group/skill">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium text-gray-300 group-hover/skill:text-white transition-colors">
                             {skill.name}
                           </span>
-                          <span className="text-xs text-dark-violet-300 group-hover:text-white transition-colors">
+                          <span className="text-xs font-semibold text-gray-500 group-hover/skill:text-accent-300 transition-colors">
                             {skill.level}%
                           </span>
                         </div>
-                        <div className="w-full h-1.5 bg-dark-violet-800/70 rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
                           <motion.div
-                            className={`h-full bg-gradient-to-r ${skill.color} rounded-full`}
+                            className={`h-full bg-gradient-to-r ${skill.color} rounded-full shadow-[0_0_10px_currentColor]`}
                             variants={barVariants}
                             initial="hidden"
                             animate={inView ? "visible" : "hidden"}
                             custom={skill.level}
+                            style={{ opacity: 0.9 }}
                           />
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
                 </motion.div>
